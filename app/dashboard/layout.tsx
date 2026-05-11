@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export default async function DashboardLayout({
   children,
@@ -14,9 +15,9 @@ export default async function DashboardLayout({
   }
 
   return (
-    <>
+    <AuthProvider>
       <div>Logged in as: {session.userType}</div>
       {children}
-    </>
+    </AuthProvider>
   );
 }

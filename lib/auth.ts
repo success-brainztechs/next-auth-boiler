@@ -1,23 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
-import z from "zod";
-
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
-
-type loginResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    access_token: string;
-    session_id: string;
-    user_id: string;
-    tenant_id: string;
-    user_type: string;
-  };
-};
+import { loginSchema } from "@/schema/auth_schema";
+import { loginResponse } from "@/types/auth_types";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
@@ -36,6 +20,8 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
+
+        //Validation in server side of next js using zod
         const parsed = loginSchema.safeParse(credentials);
 
         if (!parsed.success) {
